@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DisputeShield — Stop Chargebacks Before They Happen</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0}
+a{text-decoration:none;color:inherit}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{padding:20px 0;border-bottom:1px solid #1e293b}
+nav .container{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:700;color:#22c55e}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:#94a3b8;font-size:14px;transition:color .2s}
+.nav-links a:hover{color:#e2e8f0}
+.btn{padding:10px 24px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:#22c55e;color:#0f172a}
+.btn-primary:hover{background:#16a34a}
+.btn-outline{background:transparent;border:1px solid #334155;color:#e2e8f0}
+.btn-outline:hover{border-color:#22c55e;color:#22c55e}
+
+/* Hero */
+.hero{padding:100px 0 80px;text-align:center}
+.hero h1{font-size:52px;font-weight:800;line-height:1.1;margin-bottom:24px;background:linear-gradient(135deg,#22c55e,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:20px;color:#94a3b8;max-width:600px;margin:0 auto 40px;line-height:1.6}
+.hero-cta{display:flex;gap:16px;justify-content:center}
+
+/* Stats */
+.stats{display:flex;gap:32px;justify-content:center;padding:60px 0;border-top:1px solid #1e293b}
+.stat{text-align:center}
+.stat-value{font-size:36px;font-weight:800;color:#22c55e}
+.stat-label{font-size:14px;color:#94a3b8;margin-top:4px}
+
+/* Networks */
+.networks{padding:80px 0;text-align:center}
+.networks h2{font-size:36px;font-weight:700;margin-bottom:16px}
+.networks p{color:#94a3b8;font-size:18px;margin-bottom:48px}
+.network-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.network-card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:32px;text-align:left}
+.network-card h3{font-size:20px;margin-bottom:8px;color:#22c55e}
+.network-card p{color:#94a3b8;font-size:14px;line-height:1.6}
+.network-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:16px}
+.badge-visa{background:#3b82f620;color:#3b82f6}
+.badge-mc{background:#f59e0b20;color:#f59e0b}
+
+/* Features */
+.features{padding:80px 0;border-top:1px solid #1e293b}
+.features h2{font-size:36px;font-weight:700;text-align:center;margin-bottom:48px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.feature-card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:32px}
+.feature-icon{font-size:32px;margin-bottom:16px}
+.feature-card h3{font-size:18px;margin-bottom:8px}
+.feature-card p{color:#94a3b8;font-size:14px;line-height:1.6}
+
+/* Pricing */
+.pricing{padding:80px 0;text-align:center;border-top:1px solid #1e293b}
+.pricing h2{font-size:36px;font-weight:700;margin-bottom:48px}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:960px;margin:0 auto}
+.price-card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:32px;text-align:left}
+.price-card.featured{border-color:#22c55e;position:relative}
+.price-card.featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#22c55e;color:#0f172a;padding:4px 16px;border-radius:20px;font-size:11px;font-weight:700}
+.price-name{font-size:18px;font-weight:600;margin-bottom:4px}
+.price-value{font-size:36px;font-weight:800;margin:16px 0}
+.price-value span{font-size:16px;color:#94a3b8;font-weight:400}
+.price-features{list-style:none;margin:24px 0}
+.price-features li{padding:8px 0;color:#94a3b8;font-size:14px;border-bottom:1px solid #334155}
+.price-features li::before{content:'\2713 ';color:#22c55e;font-weight:700}
+
+/* How it works */
+.how{padding:80px 0;border-top:1px solid #1e293b;text-align:center}
+.how h2{font-size:36px;font-weight:700;margin-bottom:48px}
+.steps{display:flex;gap:32px;justify-content:center}
+.step{flex:1;max-width:280px}
+.step-num{width:48px;height:48px;border-radius:50%;background:#22c55e;color:#0f172a;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.step h3{font-size:18px;margin-bottom:8px}
+.step p{color:#94a3b8;font-size:14px;line-height:1.6}
+
+/* CTA */
+.cta{padding:80px 0;text-align:center;border-top:1px solid #1e293b}
+.cta h2{font-size:36px;font-weight:700;margin-bottom:16px}
+.cta p{color:#94a3b8;font-size:18px;margin-bottom:32px}
+
+/* Footer */
+footer{padding:40px 0;border-top:1px solid #1e293b;text-align:center;color:#64748b;font-size:13px}
+
+@media(max-width:768px){
+  .hero h1{font-size:32px}
+  .network-grid,.feature-grid,.pricing-grid{grid-template-columns:1fr}
+  .stats{flex-direction:column;gap:16px}
+  .steps{flex-direction:column;align-items:center}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="container">
+  <a href="#" class="logo">DisputeShield</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#how">How It Works</a>
+    <a href="https://app.disputeshield.com/login" class="btn btn-outline">Log In</a>
+    <a href="https://app.disputeshield.com/signup" class="btn btn-primary">Get Started</a>
+  </div>
+</div></nav>
+
+<section class="hero"><div class="container">
+  <h1>Stop Chargebacks Before They Happen</h1>
+  <p>DisputeShield intercepts disputes before they become chargebacks using CDRN, RDR, and Ethoca networks. Protect your revenue automatically.</p>
+  <div class="hero-cta">
+    <a href="https://app.disputeshield.com/signup" class="btn btn-primary" style="padding:14px 36px;font-size:16px">Start Free Trial</a>
+    <a href="#how" class="btn btn-outline" style="padding:14px 36px;font-size:16px">See How It Works</a>
+  </div>
+</div></section>
+
+<section class="stats"><div class="container" style="display:flex;gap:48px;justify-content:center">
+  <div class="stat"><div class="stat-value">70%+</div><div class="stat-label">Chargebacks Prevented</div></div>
+  <div class="stat"><div class="stat-value">$18K+</div><div class="stat-label">Revenue Saved</div></div>
+  <div class="stat"><div class="stat-value">72h</div><div class="stat-label">Before Chargeback Hits</div></div>
+  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Card Networks Covered</div></div>
+</div></section>
+
+<section class="networks"><div class="container">
+  <h2>Three Networks. Total Coverage.</h2>
+  <p>We connect to all three major chargeback alert networks so nothing slips through.</p>
+  <div class="network-grid">
+    <div class="network-card"><span class="network-badge badge-visa">Visa</span><h3>RDR (Rapid Dispute Resolution)</h3><p>Fully automated. Set your rules and disputes are resolved instantly — no manual intervention needed. Covers 95% of Visa chargebacks.</p></div>
+    <div class="network-card"><span class="network-badge badge-mc">Mastercard</span><h3>Ethoca Alerts</h3><p>Early warning alerts from Mastercard's network. You get notified before the chargeback is filed, giving you 72 hours to issue a refund.</p></div>
+    <div class="network-card"><span class="network-badge badge-visa">Visa + MC + Amex</span><h3>CDRN (Cardholder Dispute Resolution)</h3><p>Verifi's alert network covering Visa, Mastercard, Amex, and Discover. Pre-chargeback notification with time to resolve.</p></div>
+  </div>
+</div></section>
+
+<section class="features" id="features"><div class="container">
+  <h2>Everything You Need</h2>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="feature-icon">\u26A1</div><h3>Auto-Refund Rules</h3><p>Configure rules based on amount, source, reason code, and card brand. When a rule matches, refunds are processed automatically.</p></div>
+    <div class="feature-card"><div class="feature-icon">\uD83D\uDCCA</div><h3>Real-Time Dashboard</h3><p>Track chargebacks stopped, money saved, prevention rate, and costs. See breakdowns by source, reason, and time period.</p></div>
+    <div class="feature-card"><div class="feature-icon">\uD83D\uDD14</div><h3>Instant Notifications</h3><p>Get email alerts for new disputes, auto-refunds, and weekly summaries. Never miss a deadline again.</p></div>
+    <div class="feature-card"><div class="feature-icon">\uD83D\uDEE1</div><h3>MID Management</h3><p>Register all your payment descriptors and see which networks are active for each. Track ratios and coverage.</p></div>
+    <div class="feature-card"><div class="feature-icon">\uD83D\uDD17</div><h3>Processor Integration</h3><p>Connect Stripe, Square, PayPal and more. Refunds are executed directly through your existing payment processor.</p></div>
+    <div class="feature-card"><div class="feature-icon">\uD83D\uDCC8</div><h3>Analytics & Insights</h3><p>Understand your chargeback patterns. See which products, reasons, and time periods generate the most disputes.</p></div>
+  </div>
+</div></section>
+
+<section class="how" id="how"><div class="container">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><h3>Connect</h3><p>Sign up, add your payment descriptors (MIDs), and connect your payment processor.</p></div>
+    <div class="step"><div class="step-num">2</div><h3>Configure</h3><p>Set up auto-refund rules. Choose which disputes to handle automatically and which to review manually.</p></div>
+    <div class="step"><div class="step-num">3</div><h3>Protect</h3><p>Alerts flow in from CDRN, RDR, and Ethoca. Your rules process them automatically, preventing chargebacks 24/7.</p></div>
+  </div>
+</div></section>
+
+<section class="pricing" id="pricing"><div class="container">
+  <h2>Simple Pricing</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">Starter</div>
+      <div style="color:#94a3b8;font-size:13px">For small merchants</div>
+      <div class="price-value">$49<span>/month</span></div>
+      <ul class="price-features">
+        <li>Ethoca alerts</li>
+        <li>Up to 3 descriptors</li>
+        <li>5 auto-refund rules</li>
+        <li>Email notifications</li>
+        <li>Basic analytics</li>
+      </ul>
+      <a href="https://app.disputeshield.com/signup" class="btn btn-outline" style="width:100%;text-align:center;display:block;margin-top:16px">Get Started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-name">Pro</div>
+      <div style="color:#94a3b8;font-size:13px">For growing businesses</div>
+      <div class="price-value">$149<span>/month</span></div>
+      <ul class="price-features">
+        <li>Ethoca + CDRN alerts</li>
+        <li>Up to 15 descriptors</li>
+        <li>25 auto-refund rules</li>
+        <li>Auto-refund engine</li>
+        <li>Advanced analytics</li>
+      </ul>
+      <a href="https://app.disputeshield.com/signup" class="btn btn-primary" style="width:100%;text-align:center;display:block;margin-top:16px">Get Started</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name">Enterprise</div>
+      <div style="color:#94a3b8;font-size:13px">For high-volume merchants</div>
+      <div class="price-value">$399<span>/month</span></div>
+      <ul class="price-features">
+        <li>All networks (RDR + Ethoca + CDRN)</li>
+        <li>Unlimited descriptors</li>
+        <li>Unlimited rules</li>
+        <li>API access</li>
+        <li>Full analytics suite</li>
+      </ul>
+      <a href="https://app.disputeshield.com/signup" class="btn btn-outline" style="width:100%;text-align:center;display:block;margin-top:16px">Contact Sales</a>
+    </div>
+  </div>
+</div></section>
+
+<section class="cta"><div class="container">
+  <h2>Ready to Stop Losing Money to Chargebacks?</h2>
+  <p>Join merchants who prevent 70%+ of chargebacks with DisputeShield.</p>
+  <a href="https://app.disputeshield.com/signup" class="btn btn-primary" style="padding:16px 40px;font-size:16px">Start Your Free Trial</a>
+</div></section>
+
+<footer><div class="container">
+  <p>&copy; 2026 DisputeShield. All rights reserved.</p>
+</div></footer>
+
+</body>
+</html>
