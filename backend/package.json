@@ -1,7 +1,7 @@
 {
-  "name": "disputeshield-backend",
+  "name": "nolimitsdisputes-backend",
   "version": "1.0.0",
-  "description": "DisputeShield - Chargeback Prevention Platform",
+  "description": "NoLimitsDisputes - Chargeback Prevention Platform",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

@@ -1,5 +1,5 @@
 /**
- * DisputeShield — Main server
+ * NoLimitsDisputes — Main server
  */
 require('dotenv').config();
 const express = require('express');
@@ -16,7 +16,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
-    'https://disputeshield.netlify.app',
+    'https://nolimitsdisputes.netlify.app',
     'http://localhost:3001',
   ],
   credentials: true,
@@ -74,7 +74,7 @@ cron.schedule('*/14 * * * *', () => {
 // Init DB and start
 db.init().then(() => {
   app.listen(PORT, () => {
-    console.log(`DisputeShield backend running on port ${PORT}`);
+    console.log(`NoLimitsDisputes backend running on port ${PORT}`);
   });
 }).catch(err => {
   console.error('Failed to initialize:', err);

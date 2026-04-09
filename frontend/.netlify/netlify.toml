@@ -10,6 +10,7 @@ headers = []
 publish = "/Users/JoseAntonio/Desktop/DisputeShield/frontend/build"
 publishOrigin = "config"
 commandOrigin = "config"
+base = "/Users/JoseAntonio/Desktop/DisputeShield/frontend"
 command = "npm run build"
 
 [build.environment]

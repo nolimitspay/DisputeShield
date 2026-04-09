@@ -11,11 +11,11 @@ const C = {
 const PIE_C = ['#22c55e','#3b82f6','#f59e0b','#ef4444','#8b5cf6'];
 
 function useAuth() {
-  const [user, setUser] = useState(() => { try { return JSON.parse(localStorage.getItem('ds_user')); } catch { return null; } });
-  const [token, setToken] = useState(() => localStorage.getItem('ds_token'));
-  const login = async (email, password) => { const { data } = await api.post('/api/auth/login', { email, password }); localStorage.setItem('ds_token', data.token); localStorage.setItem('ds_user', JSON.stringify(data.user)); setToken(data.token); setUser(data.user); };
-  const signup = async (name, email, password, company) => { const { data } = await api.post('/api/auth/signup', { name, email, password, company }); localStorage.setItem('ds_token', data.token); localStorage.setItem('ds_user', JSON.stringify(data.user)); setToken(data.token); setUser(data.user); };
-  const logout = () => { localStorage.removeItem('ds_token'); localStorage.removeItem('ds_user'); setToken(null); setUser(null); };
+  const [user, setUser] = useState(() => { try { return JSON.parse(localStorage.getItem('nld_user')); } catch { return null; } });
+  const [token, setToken] = useState(() => localStorage.getItem('nld_token'));
+  const login = async (email, password) => { const { data } = await api.post('/api/auth/login', { email, password }); localStorage.setItem('nld_token', data.token); localStorage.setItem('nld_user', JSON.stringify(data.user)); setToken(data.token); setUser(data.user); };
+  const signup = async (name, email, password, company) => { const { data } = await api.post('/api/auth/signup', { name, email, password, company }); localStorage.setItem('nld_token', data.token); localStorage.setItem('nld_user', JSON.stringify(data.user)); setToken(data.token); setUser(data.user); };
+  const logout = () => { localStorage.removeItem('nld_token'); localStorage.removeItem('nld_user'); setToken(null); setUser(null); };
   return { user, token, login, signup, logout, isAuth: !!token };
 }
 
@@ -33,7 +33,7 @@ function Sidebar({ user, onLogout }) {
   return (
     <div style={{width:260,minHeight:'100vh',background:C.sidebar,borderRight:`1px solid ${C.border}`,display:'flex',flexDirection:'column',position:'fixed',left:0,top:0,zIndex:100}}>
       <div style={{padding:'24px 20px',borderBottom:`1px solid ${C.border}`}}>
-        <h1 style={{margin:0,fontSize:20,color:C.green,fontWeight:700}}>DisputeShield</h1>
+        <h1 style={{margin:0,fontSize:20,color:C.green,fontWeight:700}}>NoLimitsDisputes</h1>
         <span style={{fontSize:11,color:C.muted}}>Web App</span>
       </div>
       <nav style={{flex:1,padding:'12px 0'}}>
@@ -261,7 +261,7 @@ function LoginPage({onLogin}){const[email,setEmail]=useState('');const[pw,setPw]
   const submit=async e=>{e.preventDefault();setErr('');setLoading(true);try{await onLogin(email,pw);}catch(e){setErr(e.response?.data?.error||'Login failed');}setLoading(false);};
   return(<div style={{minHeight:'100vh',background:C.bg,display:'flex',alignItems:'center',justifyContent:'center'}}>
     <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:40,width:400}}>
-      <h1 style={{color:C.green,fontSize:24,marginBottom:8,textAlign:'center'}}>DisputeShield</h1>
+      <h1 style={{color:C.green,fontSize:24,marginBottom:8,textAlign:'center'}}>NoLimitsDisputes</h1>
       <p style={{color:C.muted,textAlign:'center',marginBottom:32,fontSize:14}}>Sign in to your account</p>
       {err&&<div style={{background:'#ef444420',border:'1px solid #ef444440',borderRadius:8,padding:12,marginBottom:16,color:C.red,fontSize:13}}>{err}</div>}
       <form onSubmit={submit}>
@@ -279,7 +279,7 @@ function SignupPage({onSignup}){const[f,setF]=useState({name:'',email:'',passwor
   const IS={width:'100%',padding:'12px 14px',background:C.bg,border:`1px solid ${C.border}`,color:C.text,borderRadius:8,fontSize:14,boxSizing:'border-box'};
   return(<div style={{minHeight:'100vh',background:C.bg,display:'flex',alignItems:'center',justifyContent:'center'}}>
     <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:40,width:400}}>
-      <h1 style={{color:C.green,fontSize:24,marginBottom:8,textAlign:'center'}}>DisputeShield</h1>
+      <h1 style={{color:C.green,fontSize:24,marginBottom:8,textAlign:'center'}}>NoLimitsDisputes</h1>
       <p style={{color:C.muted,textAlign:'center',marginBottom:32,fontSize:14}}>Create your account</p>
       {err&&<div style={{background:'#ef444420',border:'1px solid #ef444440',borderRadius:8,padding:12,marginBottom:16,color:C.red,fontSize:13}}>{err}</div>}
       <form onSubmit={submit}>

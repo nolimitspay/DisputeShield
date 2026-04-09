@@ -1,5 +1,5 @@
 /**
- * DisputeShield — db.js with MongoDB Atlas + in-memory fallback
+ * NoLimitsDisputes — db.js with MongoDB Atlas + in-memory fallback
  */
 const { MongoClient } = require('mongodb');
 const { v4: uuidv4 } = require('uuid');
@@ -18,7 +18,7 @@ async function connect() {
       connectTimeoutMS: 10000,
     });
     await _client.connect();
-    _db = _client.db('disputeshield');
+    _db = _client.db('nolimitsdisputes');
     console.log('MongoDB Atlas connected');
   } catch (e) {
     console.error('MongoDB failed:', e.message);
@@ -39,7 +39,7 @@ async function loadAll() {
 
 function ensureAdmin() {
   if (!_mem.users) _mem.users = [];
-  const email = process.env.ADMIN_EMAIL || 'admin@disputeshield.com';
+  const email = process.env.ADMIN_EMAIL || 'admin@nolimitsdisputes.com';
   const pass = process.env.ADMIN_PASSWORD || require('crypto').randomBytes(32).toString('hex');
   if (!_mem.users.find(u => u.email === email)) {
     const user = {
@@ -48,7 +48,7 @@ function ensureAdmin() {
       password: bcrypt.hashSync(pass, 10),
       role: 'admin',
       name: 'Admin',
-      company: 'DisputeShield',
+      company: 'NoLimitsDisputes',
       plan: 'enterprise',
       onboardingComplete: true,
       connectedProcessors: [],

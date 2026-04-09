@@ -27,7 +27,7 @@ async function sendAlertNotification(merchant, alert, action) {
   const html = `
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;background:#0f172a;color:#e2e8f0;border-radius:12px;overflow:hidden">
       <div style="background:#1e293b;padding:24px 32px;border-bottom:1px solid #334155">
-        <h1 style="margin:0;font-size:20px;color:#22c55e">DisputeShield</h1>
+        <h1 style="margin:0;font-size:20px;color:#22c55e">NoLimitsDisputes</h1>
       </div>
       <div style="padding:32px">
         <div style="background:${statusColor}20;border:1px solid ${statusColor}40;border-radius:8px;padding:16px;margin-bottom:24px">
@@ -47,15 +47,15 @@ async function sendAlertNotification(merchant, alert, action) {
         </div>` : ''}
       </div>
       <div style="background:#1e293b;padding:16px 32px;text-align:center;color:#64748b;font-size:12px">
-        DisputeShield — Chargeback Prevention Platform
+        NoLimitsDisputes — Chargeback Prevention Platform
       </div>
     </div>`;
 
   try {
     await t.sendMail({
-      from: `"DisputeShield" <${process.env.SMTP_USER}>`,
+      from: `"NoLimitsDisputes" <${process.env.SMTP_USER}>`,
       to: merchant.email,
-      subject: `[DisputeShield] ${statusText}: $${(alert.amount || 0).toFixed(2)} ${alert.source} alert`,
+      subject: `[NoLimitsDisputes] ${statusText}: $${(alert.amount || 0).toFixed(2)} ${alert.source} alert`,
       html,
     });
   } catch (e) {
@@ -69,9 +69,9 @@ async function sendWeeklyReport(merchant, stats) {
   // Weekly report email - simplified
   try {
     await t.sendMail({
-      from: `"DisputeShield" <${process.env.SMTP_USER}>`,
+      from: `"NoLimitsDisputes" <${process.env.SMTP_USER}>`,
       to: merchant.email,
-      subject: `[DisputeShield] Weekly Report — ${stats.prevented} chargebacks prevented`,
+      subject: `[NoLimitsDisputes] Weekly Report — ${stats.prevented} chargebacks prevented`,
       html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px">
         <h1 style="color:#22c55e">Weekly Report</h1>
         <p>Alerts received: <strong>${stats.received}</strong></p>
