@@ -476,6 +476,7 @@ function Sidebar() {
 
   const navItems = [
     { path: '/', label: 'Home', icon: Icons.dashboard },
+    ...(user?.role === 'admin' ? [{ path: '/admin/clients', label: 'Clients', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> }] : []),
     { path: '/disputes', label: 'Disputes', icon: Icons.disputes },
     { path: '/alerts', label: 'Chargeback Alerts', icon: Icons.alerts },
     { path: '/mids', label: 'MIDs', icon: Icons.mids },
@@ -664,6 +665,191 @@ function DashboardLayout({ children }) {
   );
 }
 
+
+/* ========================================================================
+   PAGE: ADMIN CLIENTS (admin only)
+   ======================================================================== */
+function AdminClientsPage() {
+  const { user } = useAuth();
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreate, setShowCreate] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', password: '', company: '', plan: 'starter' });
+  const [formError, setFormError] = useState('');
+  const [creating, setCreating] = useState(false);
+  const [editClient, setEditClient] = useState(null);
+
+  const fetchClients = useCallback(async () => {
+    try {
+      const { data } = await api.get('/api/admin/clients');
+      setClients(data);
+    } catch { }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { fetchClients(); }, [fetchClients]);
+
+  if (user?.role !== 'admin') return <div style={{ padding: 40, color: '#666' }}>Access denied</div>;
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    setFormError('');
+    setCreating(true);
+    try {
+      await api.post('/api/admin/clients', form);
+      setForm({ name: '', email: '', password: '', company: '', plan: 'starter' });
+      setShowCreate(false);
+      fetchClients();
+    } catch (err) {
+      setFormError(err.response?.data?.error || 'Failed to create client');
+    }
+    setCreating(false);
+  };
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`Delete client "${name}" and ALL their data? This cannot be undone.`)) return;
+    try {
+      await api.delete(`/api/admin/clients/${id}`);
+      fetchClients();
+    } catch { }
+  };
+
+  const handleUpdatePlan = async (id, plan) => {
+    try {
+      await api.put(`/api/admin/clients/${id}`, { plan });
+      fetchClients();
+    } catch { }
+  };
+
+  const inputStyle = {
+    width: '100%', padding: '10px 14px', fontSize: 14, border: `1px solid ${COLORS.border}`,
+    borderRadius: COLORS.radiusSm, outline: 'none', color: COLORS.textPrimary, boxSizing: 'border-box',
+    background: '#fff',
+  };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: COLORS.textPrimary }}>Clients</h1>
+          <p style={{ margin: '4px 0 0', fontSize: 14, color: COLORS.textSecondary }}>Manage your merchant accounts</p>
+        </div>
+        <button onClick={() => setShowCreate(true)} style={{
+          padding: '10px 20px', background: COLORS.green, color: '#fff', border: 'none',
+          borderRadius: COLORS.radiusSm, cursor: 'pointer', fontWeight: 600, fontSize: 14,
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Client
+        </button>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
+        {[
+          { label: 'TOTAL CLIENTS', value: clients.length, color: COLORS.green },
+          { label: 'TOTAL ALERTS', value: clients.reduce((s, c) => s + c.alertsCount, 0) },
+          { label: 'TOTAL PREVENTED', value: clients.reduce((s, c) => s + c.preventedCount, 0), color: COLORS.green },
+          { label: 'MONEY SAVED', value: '$' + clients.reduce((s, c) => s + c.moneySaved, 0).toLocaleString() },
+        ].map((s, i) => (
+          <Card key={i} style={{ padding: '16px 20px' }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.textSecondary, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>{s.label}</div>
+            <div style={{ fontSize: 24, fontWeight: 700, color: s.color || COLORS.textPrimary }}>{s.value}</div>
+          </Card>
+        ))}
+      </div>
+
+      {/* Create Client Modal */}
+      {showCreate && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => setShowCreate(false)}>
+          <Card style={{ width: 460, padding: 32 }} onClick={e => e.stopPropagation()}>
+            <h2 style={{ margin: '0 0 4px', fontSize: 18, fontWeight: 700, color: COLORS.textPrimary }}>New Client</h2>
+            <p style={{ margin: '0 0 20px', fontSize: 13, color: COLORS.textSecondary }}>Create a new merchant account</p>
+            {formError && <div style={{ padding: '10px 14px', borderRadius: 6, background: COLORS.redLight, color: COLORS.red, fontSize: 13, marginBottom: 16 }}>{formError}</div>}
+            <form onSubmit={handleCreate}>
+              <div style={{ display: 'grid', gap: 14 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: COLORS.textSecondary, marginBottom: 4 }}>Name *</label>
+                  <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required style={inputStyle} placeholder="John Doe" />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: COLORS.textSecondary, marginBottom: 4 }}>Email *</label>
+                  <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required style={inputStyle} placeholder="client@company.com" />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: COLORS.textSecondary, marginBottom: 4 }}>Password *</label>
+                  <input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required minLength={8} style={inputStyle} placeholder="Min 8 characters" />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: COLORS.textSecondary, marginBottom: 4 }}>Company</label>
+                  <input value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} style={inputStyle} placeholder="Company name" />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: COLORS.textSecondary, marginBottom: 4 }}>Plan</label>
+                  <select value={form.plan} onChange={e => setForm({ ...form, plan: e.target.value })} style={inputStyle}>
+                    <option value="starter">Starter ($49/mo)</option>
+                    <option value="pro">Pro ($149/mo)</option>
+                    <option value="enterprise">Enterprise ($399/mo)</option>
+                  </select>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                <button type="submit" disabled={creating} style={{ flex: 1, padding: '10px', background: COLORS.green, color: '#fff', border: 'none', borderRadius: COLORS.radiusSm, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>
+                  {creating ? 'Creating...' : 'Create Client'}
+                </button>
+                <button type="button" onClick={() => setShowCreate(false)} style={{ padding: '10px 20px', background: '#fff', border: `1px solid ${COLORS.border}`, color: COLORS.textSecondary, borderRadius: COLORS.radiusSm, cursor: 'pointer', fontSize: 14 }}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </Card>
+        </div>
+      )}
+
+      {/* Clients Table */}
+      <Card style={{ padding: 0, overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <thead>
+            <tr style={{ borderBottom: `2px solid ${COLORS.border}` }}>
+              {['Client', 'Company', 'Plan', 'Alerts', 'Prevented', 'Saved', 'Created', 'Actions'].map(h => (
+                <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: COLORS.textSecondary, textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr><td colSpan={8} style={{ padding: 40, textAlign: 'center', color: COLORS.textSecondary }}>Loading...</td></tr>
+            ) : clients.length === 0 ? (
+              <tr><td colSpan={8} style={{ padding: 40, textAlign: 'center', color: COLORS.textSecondary }}>No clients yet. Click "Add Client" to create your first merchant.</td></tr>
+            ) : clients.map(c => (
+              <tr key={c.id} style={{ borderBottom: `1px solid ${COLORS.border}` }}>
+                <td style={{ padding: '12px 16px' }}>
+                  <div style={{ fontWeight: 600, color: COLORS.textPrimary }}>{c.name}</div>
+                  <div style={{ fontSize: 12, color: COLORS.textSecondary }}>{c.email}</div>
+                </td>
+                <td style={{ padding: '12px 16px', color: COLORS.textSecondary }}>{c.company || '—'}</td>
+                <td style={{ padding: '12px 16px' }}>
+                  <select value={c.plan} onChange={e => handleUpdatePlan(c.id, e.target.value)} style={{ padding: '4px 8px', border: `1px solid ${COLORS.border}`, borderRadius: 4, fontSize: 12, color: COLORS.textPrimary, background: '#fff', cursor: 'pointer' }}>
+                    <option value="starter">Starter</option>
+                    <option value="pro">Pro</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                </td>
+                <td style={{ padding: '12px 16px', fontWeight: 600, color: COLORS.textPrimary }}>{c.alertsCount}</td>
+                <td style={{ padding: '12px 16px', fontWeight: 600, color: COLORS.green }}>{c.preventedCount}</td>
+                <td style={{ padding: '12px 16px', fontWeight: 600, color: COLORS.textPrimary }}>${c.moneySaved.toLocaleString()}</td>
+                <td style={{ padding: '12px 16px', fontSize: 12, color: COLORS.textSecondary }}>{new Date(c.createdAt).toLocaleDateString()}</td>
+                <td style={{ padding: '12px 16px' }}>
+                  <button onClick={() => handleDelete(c.id, c.name)} style={{ padding: '4px 10px', background: '#fff', border: `1px solid ${COLORS.border}`, color: COLORS.red, borderRadius: 4, fontSize: 11, cursor: 'pointer' }}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+    </div>
+  );
+}
 
 /* ========================================================================
    PAGE: HOME / DASHBOARD
@@ -1848,6 +2034,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+            <Route path="/admin/clients" element={<ProtectedRoute><AdminClientsPage /></ProtectedRoute>} />
             <Route path="/disputes" element={<ProtectedRoute><DisputesPage /></ProtectedRoute>} />
             <Route path="/alerts" element={<ProtectedRoute><ChargebackAlertsPage /></ProtectedRoute>} />
             <Route path="/mids" element={<ProtectedRoute><MIDsPage /></ProtectedRoute>} />

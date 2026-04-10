@@ -35,6 +35,7 @@ const rulesRouter = require('./routes/rules');
 const dashboardRouter = require('./routes/dashboard');
 const merchantsRouter = require('./routes/merchants');
 const webhooksRouter = require('./routes/webhooks');
+const adminRouter = require('./routes/admin');
 
 app.use('/api/auth', authRouter);
 app.use('/api/alerts', alertsRouter);
@@ -42,6 +43,7 @@ app.use('/api/rules', rulesRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/merchants', merchantsRouter);
 app.use('/api/webhooks', webhooksRouter);
+app.use('/api/admin', adminRouter);
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
